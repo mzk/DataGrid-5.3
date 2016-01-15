@@ -1,5 +1,7 @@
 <?php
 
+
+
 /**
  * Defines method that must be implemented to allow a component act like a data grid column's filter.
  *
@@ -10,15 +12,19 @@
  */
 interface IDataGridColumnFilter
 {
+
 	/**
 	 * Returns filter's form element.
+	 *
 	 * @return Nette\Forms\Controls\BaseControl
 	 */
 	function getFormControl();
 
 
+
 	/**
 	 * Gets filter's value, if was filtered.
+	 *
 	 * @return string
 	 */
 	public function getValue();

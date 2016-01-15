@@ -19,6 +19,7 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 
 	/**
 	 * Action column constructor.
+	 *
 	 * @param  string  column's textual caption
 	 * @return void
 	 */
@@ -31,8 +32,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Has column filter box?
+	 *
 	 * @return bool
 	 */
 	public function hasFilter()
@@ -41,8 +44,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Returns column's filter.
+	 *
 	 * @param  bool   throw exception if component doesn't exist?
 	 * @return IDataGridColumnFilter|NULL
 	 * @throws Nette\InvalidStateException
@@ -52,15 +57,18 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 		if ($need == TRUE) {
 			throw new Nette\InvalidStateException("ActionColumn cannot has filter.");
 		}
+
 		return NULL;
 	}
 
 
+
 	/**
 	 * Action factory.
+	 *
 	 * @param  string  textual title
 	 * @param  string  textual link destination
-	 * @param  Nette\Utils\Html    element which is added to a generated link
+	 * @param  Nette\Utils\Html element which is added to a generated link
 	 * @param  bool    use ajax? (add class self::$ajaxClass into generated link)
 	 * @param  bool    generate link with argument? (variable $keyName must be defined in data grid)
 	 * @return DataGridAction
@@ -69,12 +77,15 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	{
 		$action = new DataGridAction($title, $signal, $icon, $useAjax, $type);
 		$this[] = $action;
+
 		return $action;
 	}
 
 
+
 	/**
 	 * Does column has any action?
+	 *
 	 * @return bool
 	 */
 	public function hasAction($type = NULL)
@@ -83,8 +94,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Returns column's action specified by name.
+	 *
 	 * @param  string action's name
 	 * @param  bool   throw exception if component doesn't exist?
 	 * @return IDataGridColumnAction|NULL
@@ -95,8 +108,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Iterates over all column's actions.
+	 *
 	 * @param  string
 	 * @return ArrayIterator|NULL
 	 */
@@ -106,12 +121,15 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 		foreach ($this->getComponent('actions')->getComponents(FALSE, $type) as $action) {
 			$actions->append($action);
 		}
+
 		return $actions->getIterator();
 	}
 
 
+
 	/**
 	 * Formats cell's content.
+	 *
 	 * @param  mixed
 	 * @param  DibiRow|array
 	 * @return string
@@ -123,8 +141,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Filters data source.
+	 *
 	 * @param  mixed
 	 * @throws Nette\InvalidStateException
 	 * @return void
@@ -142,6 +162,7 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 
 	/**
 	 * Adds the component to the container.
+	 *
 	 * @param  string  component name
 	 * @param  Nette\ComponentModel\IComponent
 	 * @return void.
@@ -155,8 +176,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Returns component specified by name. Throws exception if component doesn't exist.
+	 *
 	 * @param  string  component name
 	 * @return Nette\ComponentModel\IComponent
 	 * @throws Nette\InvalidArgumentException
@@ -167,8 +190,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Does component specified by name exists?
+	 *
 	 * @param  string  component name
 	 * @return bool
 	 */
@@ -178,8 +203,10 @@ class ActionColumn extends DataGridColumn implements ArrayAccess
 	}
 
 
+
 	/**
 	 * Removes component from the container. Throws exception if component doesn't exist.
+	 *
 	 * @param  string  component name
 	 * @return void
 	 */

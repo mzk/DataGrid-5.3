@@ -15,6 +15,7 @@ require_once dirname(__FILE__) . '/IDataGridColumn.php';
  */
 abstract class DataGridColumn extends Nette\ComponentModel\Container implements IDataGridColumn
 {
+
 	/** @var Nette\Utils\Html  table header element template */
 	protected $header;
 
@@ -31,7 +32,7 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	public $replacement;
 
 	/** @var array  of callback functions */
-	public $formatCallback = array();
+	public $formatCallback = [];
 
 	/** @var bool */
 	public $orderable = TRUE;
@@ -40,8 +41,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	public static $ajaxClass = 'datagrid-ajax';
 
 
+
 	/**
 	 * Data grid column constructor.
+	 *
 	 * @param  string  textual caption of column
 	 * @param  int     maximum number of dislayed characters
 	 */
@@ -52,14 +55,18 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 		$this->header = Nette\Utils\Html::el();
 		$this->cell = Nette\Utils\Html::el();
 		$this->caption = $caption;
-		if ($maxLength !== NULL) $this->maxLength = $maxLength;
+		if ($maxLength !== NULL) {
+			$this->maxLength = $maxLength;
+		}
 		$this->monitor('DataGrid');
 	}
+
 
 
 	/**
 	 * This method will be called when the component (or component's parent)
 	 * becomes attached to a monitored object. Do not call this method yourself.
+	 *
 	 * @param  Nette\ComponentModel\IComponent
 	 * @return void
 	 */
@@ -75,8 +82,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Returns DataGrid.
+	 *
 	 * @param  bool   throw exception if form doesn't exist?
 	 * @return DataGrid
 	 */
@@ -93,6 +102,7 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 
 	/**
 	 * Returns headers's HTML element template.
+	 *
 	 * @return Nette\Utils\Html
 	 */
 	public function getHeaderPrototype()
@@ -101,8 +111,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Returns table's cell HTML element template.
+	 *
 	 * @return Nette\Utils\Html
 	 */
 	public function getCellPrototype()
@@ -111,8 +123,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Setter / property method.
+	 *
 	 * @return string
 	 */
 	public function getCaption()
@@ -132,6 +146,7 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 
 	/**
 	 * Is column orderable?
+	 *
 	 * @return bool
 	 */
 	public function isOrderable()
@@ -140,19 +155,23 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Gets header link (order signal)
+	 *
 	 * @param  string  direction of sorting (a|d|NULL)
 	 * @return string
 	 */
 	public function getOrderLink($dir = NULL)
 	{
-		return $this->getDataGrid(TRUE)->link('order', array('by' => $this->getName(), 'dir' => $dir));
+		return $this->getDataGrid(TRUE)->link('order', ['by' => $this->getName(), 'dir' => $dir]);
 	}
+
 
 
 	/**
 	 * Has column filter box?
+	 *
 	 * @return bool
 	 */
 	public function hasFilter()
@@ -161,8 +180,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Returns column's filter.
+	 *
 	 * @param  bool   throw exception if component doesn't exist?
 	 * @return IDataGridColumnFilter|NULL
 	 */
@@ -172,8 +193,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Formats cell's content. Descendant can override this method to customize formating.
+	 *
 	 * @param  mixed
 	 * @param  DibiRow|array
 	 * @return string
@@ -184,8 +207,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Filters data source. Descendant can override this method to customize filtering.
+	 *
 	 * @param  mixed
 	 * @return void
 	 */
@@ -202,12 +227,13 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 
 	/**
 	 * Adds default sorting to data grid.
+	 *
 	 * @param string
 	 * @return DataGridColumn  provides a fluent interface
 	 */
 	public function addDefaultSorting($order = 'ASC')
 	{
-		$orders = array('ASC', 'DESC', 'asc', 'desc', 'A', 'D', 'a', 'd');
+		$orders = ['ASC', 'DESC', 'asc', 'desc', 'A', 'D', 'a', 'd'];
 		if (!in_array($order, $orders)) {
 			throw new Nette\InvalidArgumentException("Order must be in '" . implode(', ', $orders) . "', '$order' given.");
 		}
@@ -220,8 +246,10 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Adds default filtering to data grid.
+	 *
 	 * @param string
 	 * @return DataGridColumn  provides a fluent interface
 	 */
@@ -235,33 +263,40 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Removes data grid's default sorting.
+	 *
 	 * @return DataGridColumn  provides a fluent interface
 	 */
 	public function removeDefaultSorting()
 	{
 		parse_str($this->getDataGrid()->defaultOrder, $list);
-		if (isset($list[$this->getName()])) unset($list[$this->getName()]);
+		if (isset($list[$this->getName()])) {
+			unset($list[$this->getName()]);
+		}
 		$this->getDataGrid()->defaultOrder = http_build_query($list, '', '&');
 
 		return $this;
 	}
 
 
+
 	/**
 	 * Removes data grid's default filtering.
+	 *
 	 * @return DataGridColumn  provides a fluent interface
 	 */
 	public function removeDefaultFiltering()
 	{
 		parse_str($this->getDataGrid()->defaultFilters, $list);
-		if (isset($list[$this->getName()])) unset($list[$this->getName()]);
+		if (isset($list[$this->getName()])) {
+			unset($list[$this->getName()]);
+		}
 		$this->getDataGrid()->defaultFilters = http_build_query($list, '', '&');
 
 		return $this;
 	}
-
 
 
 
@@ -271,6 +306,7 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 
 	/**
 	 * Alias for method addTextFilter().
+	 *
 	 * @return IDataGridColumnFilter
 	 */
 	public function addFilter()
@@ -279,45 +315,56 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	}
 
 
+
 	/**
 	 * Adds single-line text filter input to data grid.
+	 *
 	 * @return IDataGridColumnFilter
 	 * @throws Nette\InvalidArgumentException
 	 */
 	public function addTextFilter()
 	{
 		$this->_addFilter(new TextFilter);
+
 		return $this->getFilter();
 	}
+
 
 
 	/**
 	 * Adds single-line text date filter input to data grid.
 	 * Optional dependency on DatePicker class (@link http://nettephp.com/extras/datepicker)
+	 *
 	 * @return IDataGridColumnFilter
 	 * @throws Nette\InvalidArgumentException
 	 */
 	public function addDateFilter()
 	{
 		$this->_addFilter(new DateFilter);
+
 		return $this->getFilter();
 	}
 
 
+
 	/**
 	 * Adds check box filter input to data grid.
+	 *
 	 * @return IDataGridColumnFilter
 	 * @throws Nette\InvalidArgumentException
 	 */
 	public function addCheckboxFilter()
 	{
 		$this->_addFilter(new CheckboxFilter);
+
 		return $this->getFilter();
 	}
 
 
+
 	/**
 	 * Adds select box filter input to data grid.
+	 *
 	 * @param  array   items from which to choose
 	 * @param  bool    add empty first item to selectbox?
 	 * @param  bool    translate all items in selectbox?
@@ -327,12 +374,15 @@ abstract class DataGridColumn extends Nette\ComponentModel\Container implements 
 	public function addSelectboxFilter($items = NULL, $firstEmpty = TRUE, $translateItems = TRUE)
 	{
 		$this->_addFilter(new SelectboxFilter($items, $firstEmpty));
+
 		return $this->getFilter()->translateItems($translateItems);
 	}
 
 
+
 	/**
 	 * Internal filter adding routine.
+	 *
 	 * @param  IDataGridColumnFilter $filter
 	 * @return void
 	 */

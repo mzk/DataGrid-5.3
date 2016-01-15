@@ -15,14 +15,17 @@ require_once dirname(__FILE__) . '/TextFilter.php';
  */
 class DateFilter extends TextFilter
 {
+
 	/**
 	 * Returns filter's form element.
+	 *
 	 * @return Nette\Forms\Controls\BaseControl
 	 */
 	public function getFormControl()
 	{
 		parent::getFormControl();
 		$this->element->getControlPrototype()->addClass('datepicker');
+
 		return $this->element;
 	}
 }

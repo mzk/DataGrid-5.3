@@ -15,15 +15,20 @@ require_once dirname(__FILE__) . '/../DataGridColumnFilter.php';
  */
 class TextFilter extends DataGridColumnFilter
 {
+
 	/**
 	 * Returns filter's form element.
+	 *
 	 * @return Nette\Forms\Controls\BaseControl
 	 */
 	public function getFormControl()
 	{
-		if ($this->element instanceof Nette\Forms\Controls\BaseControl) return $this->element;
+		if ($this->element instanceof Nette\Forms\Controls\BaseControl) {
+			return $this->element;
+		}
 
 		$this->element = new Nette\Forms\Controls\TextInput($this->getName(), 5);
+
 		return $this->element;
 	}
 }

@@ -15,11 +15,13 @@ require_once dirname(__FILE__) . '/IDataGridColumnFilter.php';
  */
 abstract class DataGridColumnFilter extends Nette\ComponentModel\Component implements IDataGridColumnFilter
 {
+
 	/** @var Nette\Forms\Controls\BaseControl  form element */
 	protected $element;
 
 	/** @var string  value of filter (if was filtered) */
 	protected $value;
+
 
 
 	public function __construct()
@@ -35,6 +37,7 @@ abstract class DataGridColumnFilter extends Nette\ComponentModel\Component imple
 
 	/**
 	 * Returns filter's form element.
+	 *
 	 * @return Nette\Forms\Controls\BaseControl
 	 */
 	public function getFormControl()
@@ -42,8 +45,10 @@ abstract class DataGridColumnFilter extends Nette\ComponentModel\Component imple
 	}
 
 
+
 	/**
 	 * Gets filter's value, if was filtered.
+	 *
 	 * @return string
 	 */
 	public function getValue()
@@ -58,12 +63,15 @@ abstract class DataGridColumnFilter extends Nette\ComponentModel\Component imple
 				break;
 			}
 		}
+
 		return $this->value;
 	}
 
 
+
 	/**
 	 * Sets filter's value.
+	 *
 	 * @param string
 	 * @return void
 	 */

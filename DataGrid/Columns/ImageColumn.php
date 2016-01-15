@@ -15,8 +15,10 @@ require_once dirname(__FILE__) . '/TextColumn.php';
  */
 class ImageColumn extends TextColumn
 {
+
 	/**
 	 * Checkbox column constructor.
+	 *
 	 * @param  string  column's textual caption
 	 * @return void
 	 */

@@ -15,13 +15,17 @@ require_once dirname(__FILE__) . '/../DataGridColumnFilter.php';
  */
 class CheckboxFilter extends DataGridColumnFilter
 {
+
 	/**
 	 * Returns filter's form element.
+	 *
 	 * @return Nette\Forms\Controls\BaseControl
 	 */
 	public function getFormControl()
 	{
-		if ($this->element instanceof Nette\Forms\Controls\BaseControl) return $this->element;
+		if ($this->element instanceof Nette\Forms\Controls\BaseControl) {
+			return $this->element;
+		}
 		$element = new Nette\Forms\Controls\Checkbox($this->getName());
 
 		return $this->element = $element;

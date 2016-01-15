@@ -15,12 +15,15 @@ require_once dirname(__FILE__) . '/../DataGridColumn.php';
  */
 class NumericColumn extends DataGridColumn
 {
+
 	/** @var int */
 	public $precision;
 
 
+
 	/**
 	 * Checkbox column constructor.
+	 *
 	 * @param  string  column's textual caption
 	 * @param  string  number of digits after the decimal point
 	 * @return void
@@ -32,8 +35,10 @@ class NumericColumn extends DataGridColumn
 	}
 
 
+
 	/**
 	 * Formats cell's content.
+	 *
 	 * @param  mixed
 	 * @param  DibiRow|array
 	 * @return string
@@ -55,20 +60,25 @@ class NumericColumn extends DataGridColumn
 		return round($value, $this->precision);
 	}
 
+
+
 	/**
 	 * Filters data source.
+	 *
 	 * @param  mixed
 	 * @return void
 	 */
 	public function applyFilter($value)
 	{
-		if (!$this->hasFilter()) return;
+		if (!$this->hasFilter()) {
+			return;
+		}
 
 		$column = $this->getName();
-		$cond = array();
+		$cond = [];
 
 		if ($value === 'NULL' || $value === 'NOT NULL') {
-			$cond[] = array("[$column] IS $value");
+			$cond[] = ["[$column] IS $value"];
 
 		} else {
 			$operator = '=';
@@ -81,7 +91,7 @@ class NumericColumn extends DataGridColumn
 				$value = $matches['value'];
 			}
 
-			$cond[] = array("[$column] $operator %f", $value);
+			$cond[] = ["[$column] $operator %f", $value];
 		}
 
 		$datagrid = $this->getDataGrid(TRUE);

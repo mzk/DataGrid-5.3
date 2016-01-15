@@ -1,5 +1,7 @@
 <?php
 
+
+
 /**
  * Defines method that must implement data grid rendered.
  *
@@ -10,8 +12,10 @@
  */
 interface IDataGridRenderer
 {
+
 	/**
 	 * Provides complete data grid rendering.
+	 *
 	 * @param  DataGrid
 	 * @return string
 	 */

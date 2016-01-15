@@ -12,5 +12,5 @@ TODO
 NOTES
 =====
 - optimalizace SelectboxFilter::generateItems()
-	az bude umet DibiDataSource DISTINCT prepsat, prozatimni reseni: prevedeno na fluent a na nem aplikovan DISTINCT 
+	az bude umet DibiDataSource DISTINCT prepsat, prozatimni reseni: prevedeno na fluent a na nem aplikovan DISTINCT
 	(testovano na 50000 radkove tabulce - nativni DDS s DISTINCT je o 1/3 rychlejsi nez prevod z DSS na fluent a pak DISTINCT)

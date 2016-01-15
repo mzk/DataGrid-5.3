@@ -1,5 +1,7 @@
 <?php
 
+use Dibi\DataSource;
+
 require_once dirname(__FILE__) . '/IDataGridRenderer.php';
 
 
@@ -15,77 +17,78 @@ require_once dirname(__FILE__) . '/IDataGridRenderer.php';
  */
 class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 {
+
 	/** @var array  of HTML tags */
-	public $wrappers = array(
-		'datagrid' => array(
+	public $wrappers = [
+		'datagrid' => [
 			'container' => 'table class=datagrid',
-		),
+		],
 
-		'form' => array(
+		'form' => [
 			'.class' => 'datagrid',
-		),
+		],
 
-		'error' => array(
+		'error' => [
 			'container' => 'ul class=error',
 			'item' => 'li',
-		),
+		],
 
-		'row.header' => array(
+		'row.header' => [
 			'container' => 'tr class=header',
-			'cell' => array(
+			'cell' => [
 				'container' => 'th', // .checker, .action
 				'.active' => 'active',
-			),
-		),
+			],
+		],
 
-		'row.filter' => array(
+		'row.filter' => [
 			'container' => 'tr class=filters',
-			'cell' => array(
+			'cell' => [
 				'container' => 'td', // .action
-			),
-			'control' => array(
+			],
+			'control' => [
 				'.input' => 'text',
 				'.select' => 'select',
 				'.submit' => 'button',
-			),
-		),
+			],
+		],
 
-		'row.content' => array(
+		'row.content' => [
 			'container' => 'tr', // .even, .selected
 			'.even' => 'even',
-			'cell' => array(
+			'cell' => [
 				'container' => 'td', // .checker, .action
-			),
-		),
+			],
+		],
 
-		'row.footer' => array(
+		'row.footer' => [
 			'container' => 'tr class=footer',
-			'cell' => array(
+			'cell' => [
 				'container' => 'td',
-			),
-		),
+			],
+		],
 
-		'paginator' => array(
+		'paginator' => [
 			'container' => 'span class=paginator',
-			'button' => array(
+			'button' => [
 				'first' => 'span class="paginator-first"',
 				'prev' => 'span class="paginator-prev"',
 				'next' => 'span class="paginator-next"',
 				'last' => 'span class="paginator-last"',
-			),
-			'controls' => array(
+			],
+			'controls' => [
 				'container' => 'span class=paginator-controls',
-			),
-		),
+			],
+		],
 
-		'operations' => array(
+		'operations' => [
 			'container' => 'span class=operations',
-		),
+		],
 
-		'info' => array(
+		'info' => [
 			'container' => 'span class=grid-info',
-		),
-	);
+		],
+	];
 
 	/** @var string */
 	public $footerFormat = '%operations% %paginator% %info%';
@@ -96,7 +99,7 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	/** @var string */
 	public $infoFormat = 'Items %from% - %to% of %count% | Display: %selectbox% | %reset%';
 
-	/** @var string  template file*/
+	/** @var string  template file */
 	public $file;
 
 	/** @var DataGrid */
@@ -115,6 +118,7 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 
 	/**
 	 * Data grid renderer constructor.
+	 *
 	 * @return void
 	 */
 	public function __construct()
@@ -123,8 +127,10 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	}
 
 
+
 	/**
 	 * Provides complete datagrid rendering.
+	 *
 	 * @param  DataGrid
 	 * @param  string
 	 * @return string
@@ -135,22 +141,25 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 			$this->dataGrid = $dataGrid;
 		}
 
-		if (!$dataGrid->dataSource instanceof DibiDataSource) {
+		if (!$dataGrid->dataSource instanceof DataSource) {
 			throw new Nette\InvalidArgumentException("Data source was not setted. You must set data source to data grid before rendering.");
 		}
 
 		if ($mode !== NULL) {
-			return call_user_func_array(array($this, 'render' . $mode), array());
+			return call_user_func_array([$this, 'render' . $mode], []);
 		}
 
 		$template = $this->dataGrid->getTemplate();
 		$template->setFile($this->file);
+
 		return $template->__toString(TRUE);
 	}
 
 
+
 	/**
 	 * Renders datagrid form begin.
+	 *
 	 * @return string
 	 */
 	public function renderBegin()
@@ -160,23 +169,29 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 			$control->setOption('rendered', FALSE);
 		}
 		$form->getElementPrototype()->addClass($this->getValue('form .class'));
+
 		return $form->getElementPrototype()->startTag();
 	}
 
 
+
 	/**
 	 * Renders datagrid form end.
+	 *
 	 * @return string
 	 */
 	public function renderEnd()
 	{
 		$form = $this->dataGrid->getForm(TRUE);
+
 		return $form->getElementPrototype()->endTag() . "\n";
 	}
 
 
+
 	/**
 	 * Renders validation errors.
+	 *
 	 * @return string
 	 */
 	public function renderErrors()
@@ -197,13 +212,16 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 				}
 				$ul->add($item);
 			}
+
 			return "\n" . $ul->render(0);
 		}
 	}
 
 
+
 	/**
 	 * Renders data grid body.
+	 *
 	 * @return string
 	 */
 	public function renderBody()
@@ -246,14 +264,18 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	}
 
 
+
 	/**
 	 * Renders data grid paginator.
+	 *
 	 * @return string
 	 */
 	public function renderPaginator()
 	{
 		$paginator = $this->dataGrid->paginator;
-		if ($paginator->pageCount <= 1) return '';
+		if ($paginator->pageCount <= 1) {
+			return '';
+		}
 
 		$container = $this->getWrapper('paginator container');
 		$translator = $this->dataGrid->getTranslator();
@@ -266,8 +288,11 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		$title = $this->dataGrid->translate('First');
 		$link = clone $a->href($this->dataGrid->link('page', 1));
 		if ($first instanceof Nette\Utils\Html) {
-			if ($paginator->isFirst()) $first->addClass('inactive');
-			else $first = $link->add($first);
+			if ($paginator->isFirst()) {
+				$first->addClass('inactive');
+			} else {
+				$first = $link->add($first);
+			}
 			$first->title($title);
 		} else {
 			$first = $link->setText($title);
@@ -279,8 +304,11 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		$title = $this->dataGrid->translate('Previous');
 		$link = clone $a->href($this->dataGrid->link('page', $paginator->page - 1));
 		if ($prev instanceof Nette\Utils\Html) {
-			if ($paginator->isFirst()) $prev->addClass('inactive');
-			else $prev = $link->add($prev);
+			if ($paginator->isFirst()) {
+				$prev->addClass('inactive');
+			} else {
+				$prev = $link->add($prev);
+			}
 			$prev->title($title);
 		} else {
 			$prev = $link->setText($title);
@@ -292,8 +320,8 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		$form = $this->dataGrid->getForm(TRUE);
 		$format = $this->dataGrid->translate($this->paginatorFormat);
 		$html = str_replace(
-			array('%label%', '%input%', '%count%'),
-			array($form['page']->label, $form['page']->control, $paginator->pageCount),
+			['%label%', '%input%', '%count%'],
+			[$form['page']->label, $form['page']->control, $paginator->pageCount],
 			$format
 		);
 		$controls->add(Nette\Utils\Html::el()->setHtml($html));
@@ -304,8 +332,11 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		$title = $this->dataGrid->translate('Next');
 		$link = clone $a->href($this->dataGrid->link('page', $paginator->page + 1));
 		if ($next instanceof Nette\Utils\Html) {
-			if ($paginator->isLast()) $next->addClass('inactive');
-			else $next = $link->add($next);
+			if ($paginator->isLast()) {
+				$next->addClass('inactive');
+			} else {
+				$next = $link->add($next);
+			}
 			$next->title($title);
 		} else {
 			$next = $link->setText($title);
@@ -317,8 +348,11 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		$title = $this->dataGrid->translate('Last');
 		$link = clone $a->href($this->dataGrid->link('page', $paginator->pageCount));
 		if ($last instanceof Nette\Utils\Html) {
-			if ($paginator->isLast()) $last->addClass('inactive');
-			else $last = $link->add($last);
+			if ($paginator->isLast()) {
+				$last->addClass('inactive');
+			} else {
+				$last = $link->add($last);
+			}
 			$last->title($title);
 		} else {
 			$last = $link->setText($title);
@@ -331,17 +365,22 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		$container->add($control);
 
 		unset($first, $prev, $next, $last, $button, $paginator, $link, $a, $form);
+
 		return $container->render();
 	}
 
 
+
 	/**
 	 * Renders data grid operation controls.
+	 *
 	 * @return string
 	 */
 	public function renderOperations()
 	{
-		if (!$this->dataGrid->hasOperations()) return '';
+		if (!$this->dataGrid->hasOperations()) {
+			return '';
+		}
 
 		$container = $this->getWrapper('operations container');
 		$form = $this->dataGrid->getForm(TRUE);
@@ -353,8 +392,10 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	}
 
 
+
 	/**
 	 * Renders info about data grid.
+	 *
 	 * @return string
 	 */
 	public function renderInfo()
@@ -368,30 +409,33 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 
 		$this->infoFormat = $this->dataGrid->translate($this->infoFormat);
 		$html = str_replace(
-			array(
+			[
 				'%from%',
 				'%to%',
 				'%count%',
 				'%selectbox%',
 				'%reset%'
-			),
-			array(
+			],
+			[
 				$paginator->itemCount != 0 ? $paginator->offset + 1 : $paginator->offset,
 				$paginator->offset + $paginator->length,
 				$paginator->itemCount,
 				$form['items']->control . $form['itemsSubmit']->control->title($form['itemsSubmit']->control->value),
 				($this->dataGrid->rememberState ? $stateSubmit : ''),
-			),
+			],
 			$this->infoFormat
 		);
 
 		$container->setHtml(trim($html, ' | '));
+
 		return $container->render();
 	}
 
 
+
 	/**
 	 * Generates datagrid headrer.
+	 *
 	 * @return Nette\Utils\Html
 	 */
 	protected function generateHeaderRow()
@@ -417,7 +461,7 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 				$i = 1;
 				parse_str($this->dataGrid->order, $list);
 				foreach ($list as $field => $dir) {
-					$list[$field] = array($dir, $i++);
+					$list[$field] = [$dir, $i++];
 				}
 
 				if (isset($list[$column->getName()])) {
@@ -440,7 +484,7 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 				$active = $a || $d;
 
 				$value = (string) Nette\Utils\Html::el('a')->href($column->getOrderLink())
-					->addClass(DataGridColumn::$ajaxClass)->setHtml($text) . $positioner;
+						->addClass(DataGridColumn::$ajaxClass)->setHtml($text) . $positioner;
 			} else {
 				$value = (string) Nette\Utils\Html::el('p')->setText($value);
 			}
@@ -448,7 +492,9 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 			$cell = $this->getWrapper('row.header cell container')->setHtml($value);
 			$cell->attrs = $column->getHeaderPrototype()->attrs;
 			$cell->addClass(isset($active) && $active == TRUE ? $this->getValue('row.header cell .active') : NULL);
-			if ($column instanceof ActionColumn) $cell->addClass('actions');
+			if ($column instanceof ActionColumn) {
+				$cell->addClass('actions');
+			}
 
 			$row->add($cell);
 		}
@@ -457,8 +503,10 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	}
 
 
+
 	/**
 	 * Generates datagrid filter.
+	 *
 	 * @return Nette\Utils\Html
 	 */
 	protected function generateFilterRow()
@@ -509,8 +557,10 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	}
 
 
+
 	/**
 	 * Generates datagrid row content.
+	 *
 	 * @param  DibiRow data
 	 * @return Nette\Utils\Html
 	 */
@@ -529,7 +579,7 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		// checker
 		if ($this->dataGrid->hasOperations()) {
 			$value = $form['checker'][$data[$primary]]->getControl();
-			$cell = $this->getWrapper('row.content cell container')->setHtml((string)$value);
+			$cell = $this->getWrapper('row.content cell container')->setHtml((string) $value);
 			$cell->addClass('checker');
 			$row->add($cell);
 		}
@@ -544,7 +594,7 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 				foreach ($this->dataGrid->getActions() as $action) {
 					$html = $action->getHtml();
 					$html->title($this->dataGrid->translate($html->title));
-					$action->generateLink(array($primary => $data[$primary]));
+					$action->generateLink([$primary => $data[$primary]]);
 					$this->onActionRender($html, $data);
 					$value .= $html->render() . ' ';
 				}
@@ -557,18 +607,21 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 				$value = $column->formatContent($data[$column->getName()], $data);
 			}
 
-			$cell->setHtml((string)$value);
+			$cell->setHtml((string) $value);
 			$this->onCellRender($cell, $column->getName(), !($column instanceof ActionColumn) ? $data[$column->getName()] : $data);
 			$row->add($cell);
 		}
 		unset($form, $primary, $cell, $value, $action);
 		$this->onRowRender($row, $data);
+
 		return $row;
 	}
 
 
+
 	/**
 	 * Generates datagrid footer.
+	 *
 	 * @return Nette\Utils\Html
 	 */
 	protected function generateFooterRow()
@@ -578,23 +631,25 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 		$row = $this->getWrapper('row.footer container');
 
 		$count = count($this->dataGrid->getColumns());
-		if ($this->dataGrid->hasOperations()) $count++;
+		if ($this->dataGrid->hasOperations()) {
+			$count++;
+		}
 
 		$cell = $this->getWrapper('row.footer cell container');
 		$cell->colspan($count);
 
 		$this->footerFormat = $this->dataGrid->translate($this->footerFormat);
 		$html = str_replace(
-			array(
+			[
 				'%operations%',
 				'%paginator%',
 				'%info%',
-			),
-			array(
+			],
+			[
 				$this->renderOperations(),
 				$this->renderPaginator(),
 				$this->renderInfo(),
-			),
+			],
 			$this->footerFormat
 		);
 		$cell->setHtml($html);
@@ -604,6 +659,7 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	}
 
 
+
 	/**
 	 * @param  string
 	 * @return Nette\Utils\Html
@@ -611,8 +667,10 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	protected function getWrapper($name)
 	{
 		$data = $this->getValue($name);
+
 		return $data instanceof Nette\Utils\Html ? clone $data : Nette\Utils\Html::el($data);
 	}
+
 
 
 	/**
@@ -623,16 +681,19 @@ class DataGridRenderer extends Nette\Object implements IDataGridRenderer
 	{
 		$name = explode(' ', $name);
 		if (count($name) == 3) {
-			$data = & $this->wrappers[$name[0]][$name[1]][$name[2]];
+			$data = &$this->wrappers[$name[0]][$name[1]][$name[2]];
 		} else {
-			$data = & $this->wrappers[$name[0]][$name[1]];
+			$data = &$this->wrappers[$name[0]][$name[1]];
 		}
+
 		return $data;
 	}
 
 
+
 	/**
 	 * Returns DataGrid.
+	 *
 	 * @return DataGrid
 	 */
 	public function getDataGrid()

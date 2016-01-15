@@ -15,8 +15,9 @@ require_once dirname(__FILE__) . '/NumericColumn.php';
  */
 class PositionColumn extends NumericColumn
 {
+
 	/** @var array */
-	public $moves = array();
+	public $moves = [];
 
 	/** @var string  signal handler of move action */
 	public $destination;
@@ -31,8 +32,10 @@ class PositionColumn extends NumericColumn
 	protected $max;
 
 
+
 	/**
 	 * Checkbox column constructor.
+	 *
 	 * @param  string  column's textual caption
 	 * @param  string  destination or signal to handler which do the move rutine
 	 * @param  array   textual labels for generated links
@@ -63,9 +66,11 @@ class PositionColumn extends NumericColumn
 	}
 
 
+
 	/**
 	 * This method will be called when the component (or component's parent)
 	 * becomes attached to a monitored object. Do not call this method yourself.
+	 *
 	 * @param  Nette\ComponentModel\IComponent
 	 * @return void
 	 */
@@ -73,7 +78,7 @@ class PositionColumn extends NumericColumn
 	{
 		if ($dataGrid instanceof DataGrid) {
 			$dataSource = clone $dataGrid->dataSource;
-			$dataSource->orderBy(array());
+			$dataSource->orderBy([]);
 			$this->min = (int) $dataSource->select($this->getName())->orderBy($this->getName(), 'ASC')->fetchSingle();
 			$this->max = (int) $dataSource->select($this->getName())->orderBy($this->getName(), 'DESC')->fetchSingle();
 		}
@@ -82,8 +87,10 @@ class PositionColumn extends NumericColumn
 	}
 
 
+
 	/**
 	 * Formats cell's content.
+	 *
 	 * @param  mixed
 	 * @param  DibiRow|array
 	 * @return string
@@ -91,8 +98,8 @@ class PositionColumn extends NumericColumn
 	public function formatContent($value, $data = NULL)
 	{
 		$control = $this->getDataGrid(TRUE)->lookup('Nette\Application\UI\Control', TRUE);
-		$uplink = $control->link($this->destination, array('key' => $value, 'dir' => 'up'));
-		$downlink = $control->link($this->destination, array('key' => $value, 'dir' => 'down'));
+		$uplink = $control->link($this->destination, ['key' => $value, 'dir' => 'up']);
+		$downlink = $control->link($this->destination, ['key' => $value, 'dir' => 'down']);
 
 		$up = Nette\Utils\Html::el('a')->title($this->moves['up'])->href($uplink)->add(Nette\Utils\Html::el('span')->class('up'));
 		$down = Nette\Utils\Html::el('a')->title($this->moves['down'])->href($downlink)->add(Nette\Utils\Html::el('span')->class('down'));
@@ -113,6 +120,7 @@ class PositionColumn extends NumericColumn
 		}
 
 		$positioner = Nette\Utils\Html::el('span')->class('positioner')->add($up)->add($down);
+
 		return $positioner . $value;
 	}
 }

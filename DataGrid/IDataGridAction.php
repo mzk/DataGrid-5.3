@@ -1,5 +1,7 @@
 <?php
 
+
+
 /**
  * Defines method that must be implemented to allow a component act like a data grid action.
  *
@@ -10,8 +12,10 @@
  */
 interface IDataGridAction
 {
+
 	/**
 	 * Gets action element template.
+	 *
 	 * @return Nette\Utils\Html
 	 */
 	function getHtml();
