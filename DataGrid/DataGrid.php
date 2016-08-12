@@ -53,7 +53,7 @@ class DataGrid extends Nette\Application\UI\Control
 	public $itemsPerPage = 15;
 
 	/** @var array */
-	public $displayedItems = ['all', 5, 10, 15, 20, 50, 100];
+	public $displayedItems = ['all', 5, 10, 15, 20, 50, 100, 200, 300, 500];
 
 	/** @var bool  multi column order */
 	public $multiOrder = TRUE;
@@ -127,7 +127,7 @@ class DataGrid extends Nette\Application\UI\Control
 	 * Binds data source to data grid.
 	 *
 	 * @param  DataSource
-	 * @throws DibiException
+	 * @throws \Dibi\Exception
 	 * @return void
 	 */
 	public function bindDataTable(DataSource $dataSource)
@@ -893,9 +893,15 @@ class DataGrid extends Nette\Application\UI\Control
 		}
 
 		$form = new Nette\Application\UI\Form($this, $name);
+		$form->setAction($this->presenter->link('//this', [
+			'do' => 'gridGoods-form-submit',
+		]));
+
 		$form->setTranslator($this->getTranslator());
 		Nette\Forms\Controls\BaseControl::$idMask = 'frm-datagrid-' . $this->getUniqueId() . '-%s';
-		$form->onSuccess[] = [$this, 'formSubmitHandler'];
+
+		$form->onSubmit[] = [$this, 'formSubmitHandler'];
+
 
 		$form->addSubmit('resetSubmit', 'Reset state');
 		$form->addSubmit('filterSubmit', 'Apply filters');
@@ -950,7 +956,7 @@ class DataGrid extends Nette\Application\UI\Control
 		$renderer->wrappers['control']['container'] = NULL;
 		$form->setRenderer($renderer);
 
-		return;
+		return $form;
 	}
 
 
@@ -1289,7 +1295,7 @@ class DataGrid extends Nette\Application\UI\Control
 	 */
 	protected function getStateSession()
 	{
-		return $this->getSession()->getNamespace('Nette.Extras.DataGrid/' . $this->getName() . '/states');
+		return $this->getSession()->getSection('Nette.Extras.DataGrid/' . $this->getName() . '/states');
 	}
 
 
