@@ -103,6 +103,8 @@ class DataGrid extends Nette\Application\UI\Control
 	/** @var Nette\Localization\ITranslator */
 	protected $translator;
 
+	/** @var Nette\Http\Session */
+	private $session;
 
 
 	/**
@@ -116,7 +118,7 @@ class DataGrid extends Nette\Application\UI\Control
 		$this->paginator = new Nette\Utils\Paginator;
 
 		$session = $this->getSession();
-		if (!$session->isStarted()) {
+		if ($session && !$session->isStarted()) {
 			$session->start();
 		}
 	}
@@ -857,6 +859,10 @@ class DataGrid extends Nette\Application\UI\Control
 		echo mb_convert_encoding($s, 'HTML-ENTITIES', 'UTF-8');
 	}
 
+	public function setSession(\Nette\Http\Session $session)
+	{
+		$this->session = $session;
+	}
 
 
 	/**
@@ -1305,7 +1311,7 @@ class DataGrid extends Nette\Application\UI\Control
 	 */
 	protected function getSession()
 	{
-		return Nette\Environment::getSession();
+		$this->session;
 	}
 
 
